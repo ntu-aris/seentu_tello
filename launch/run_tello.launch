@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <!-- Launch the driver -->
+    <arg name="drone_model" default="tello"/>
+    <param name="drone_model" type="str" value="$(arg drone_model)" />
+	<node name="tello_driver_node" pkg="tello_driver" type="tello_driver_node.py" output="screen"/>
+
+    <!-- Launch the controller -->
+    <!-- <node name="seentu_tello_mission" pkg="seentu_tello" type="mission_planner.py" output="screen"/> -->
+
+    <!-- Launch the visualizer -->
+    <node pkg="rviz" type="rviz" name="rviz_tello" args="-d $(find seentu_tello)/launch/tello.rviz"/>
+
+</launch>
