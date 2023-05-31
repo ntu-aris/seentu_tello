@@ -20,7 +20,7 @@ import tf
 traj_profile = np.array([ [ 6,  0.01,  0.01,  0.01, 0.0],
                           [ 3,  0.2,  0.0,  0.0,  0.0],
                           [ 3,  0.0,  0.0,  0.0,  PI/4],
-                          [ 3,  0.2,  0.2,  0.0,  0.0],
+                          [ 3,  0.2,  0.0,  0.0,  0.0],
                           [ 3,  0.0,  0.0,  0.0,  PI/4],
                           [ 3,  0.2,  0.0,  0.0,  0.0],
                           [ 3,  0.0,  0.0,  0.0,  PI/4],
@@ -79,24 +79,24 @@ while not rospy.is_shutdown():
     eul = euler_from_quaternion([odom.pose.pose.orientation.w, odom.pose.pose.orientation.x, odom.pose.pose.orientation.y, odom.pose.pose.orientation.z])
     vel = np.array([odom.twist.twist.linear.x, odom.twist.twist.linear.y, odom.twist.twist.linear.z])
 
-    # Update the setpoint by time
-    if (rospy.Time.now() - last_setpoint_time).to_sec() > traj_profile[current_setpoint, 0]:
+    # # Update the setpoint by time
+    # if (rospy.Time.now() - last_setpoint_time).to_sec() > traj_profile[current_setpoint, 0]:
         
-        last_setpoint_time = rospy.Time.now()
-        current_setpoint += 1
+    #     last_setpoint_time = rospy.Time.now()
+    #     current_setpoint += 1
 
-        if current_setpoint == traj_profile.shape[0]:
-            current_setpoint = traj_profile.shape[0]-1
-            land_srv(min_pitch=0.0, yaw=0.0, latitude=0.0, longitude=0.0, altitude=0.0)
-        else:
-            # Publish the setpoint position
-            pos_setpoint.header.stamp = rospy.Time.now()
-            pos_setpoint.header.frame_id = "map"
-            pos_setpoint.coordinate_frame = 1
-            pos_setpoint.velocity.x = traj_profile[current_setpoint, 1]
-            pos_setpoint.velocity.y = traj_profile[current_setpoint, 2]
-            pos_setpoint.velocity.z = traj_profile[current_setpoint, 3]
-            pos_setpoint.yaw_rate   = traj_profile[current_setpoint, 4]
+    #     if current_setpoint == traj_profile.shape[0]:
+    #         current_setpoint = traj_profile.shape[0]-1
+    #         land_srv(min_pitch=0.0, yaw=0.0, latitude=0.0, longitude=0.0, altitude=0.0)
+    #     else:
+    #         # Publish the setpoint position
+    #         pos_setpoint.header.stamp = rospy.Time.now()
+    #         pos_setpoint.header.frame_id = "map"
+    #         pos_setpoint.coordinate_frame = 1
+    #         pos_setpoint.velocity.x = traj_profile[current_setpoint, 1]
+    #         pos_setpoint.velocity.y = traj_profile[current_setpoint, 2]
+    #         pos_setpoint.velocity.z = traj_profile[current_setpoint, 3]
+    #         pos_setpoint.yaw_rate   = traj_profile[current_setpoint, 4]
 
     # Compose a text report
     info_text = f'Time: {(rospy.Time.now() - start_time).to_sec():6.3f}. ' + \
